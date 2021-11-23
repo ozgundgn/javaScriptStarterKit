@@ -4,7 +4,7 @@ import DataError from "../models/dataError.js";
 export default class UserService{ //export dışardan ekleyebilme, default js file based olduğu için dosya bazlı UserService i import ettiğimde default olarak bunu implemente et dedik
 constructor(loggerService){
 
-    this.employess=[],
+    this.employees=[],
     this.customers=[],
     this.errors=[],
     this.loggerService=loggerService
@@ -20,7 +20,7 @@ for(const user of users){
             break;
     case "employee":
         if(!this.checkEmployeeValidityForErrors(user)){
-            this.employess.push(user)
+            this.employees.push(user)
         }
         break;
         default:
@@ -38,10 +38,15 @@ for (const field of requiredFields) {
         this.errors.push(new DataError(`Validation problem. ${field} is required`,user))
     }
 }
+
+if(Number.isNaN(Number.parseInt(user.age))){
+    this.errors.push(new DataError(`Validaton problem. ${user.age}`,user))
+}
 return hasErrors;
 }
 
 checkEmployeeValidityForErrors(user){
+    
     let requiredFields="id firstName lastName age city salary".split(" ");
     let hasErrors=false
     for (const field of requiredFields) {
@@ -57,13 +62,40 @@ checkEmployeeValidityForErrors(user){
     return hasErrors;
     }
 add(user){
+    switch (user.type) {
+        case "cutomers":
+            if(!this.checkCustomerValidityForErrors(user)){
+                this.customers.push(user)
+            }
+            break;
+    case "employee":
+        if(!this.checkEmployeeValidityForErrors(user)){
+            this.employees.push(user)
+        }
+        default:
+            this.errors.push( new DataError("Wrong user type",user))
+            break;
+    }
  //this.users.push(user)
  this.loggerService.log(user)
 }
-list(){
- //return  this.users
+listCustomers(){
+ return this.customers;
 }
-getById(id){
- //return  this.users.find(x=>x.id===id)
+getCustomerById(id){
+ return  this.customers.find(x=>x.id===id)
+}
+
+getCustomersSorted(){
+   return this.customers.sort((customer1,customer2)=>{
+        if(customer1.firstName<customer2.firstName){//["firstname" gibi kullan refactoringde           return 1
+        return 1;
+        }else if(customer1.firstName===customer2.firstName)
+        {
+     return 0;
+        }else{
+            return -1
+        }
+    })
 }
 }
