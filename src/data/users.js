@@ -9,7 +9,7 @@ export const users=[
         type:"customer"
     },
     {
-        id:1,
+        id:2,
         firstName:"Mustafa",
         lastName:"Sansar",
         city:"İstanbul",
@@ -36,7 +36,7 @@ export const users=[
         type:"employee"
     },
     {
-        id:6,
+        id:5,
         firstName:"Eren",
         lastName:"Arı",
         city:"Diyarbakır",
